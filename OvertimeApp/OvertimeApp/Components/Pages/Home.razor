@@ -1,7 +1,75 @@
 ﻿@page "/"
+@using System.ComponentModel.DataAnnotations
 
-<PageTitle>Home</PageTitle>
+<PageTitle>Calculator</PageTitle>
 
-<h1>Hello, world!</h1>
+<div class="container">
+    <h2>Salary Calculation Form</h2>
+    <EditForm OnValidSubmit="CalculateSalary" Model="DataModel" FormName="salary-calculator-form">
+        <DataAnnotationsValidator/>
+        <ValidationSummary/>
 
-Welcome to your new app.
+        <div class="mb-3">
+            <label class="form-label form-label" for="salary">Salary</label>
+            <InputNumber class="form-control form-control" id="salary" placeholder="Enter your salary" @bind-Value="DataModel!.Salary"/>
+        </div>
+        <div class="mb-3">
+            <label class="form-label form-label" for="extraHours">Extra Hours</label>
+            <InputNumber class="form-control form-control" id="extraHours" placeholder="Enter your extra working hours" @bind-Value="DataModel!.ExtraHours"/>
+        </div>
+        <button class="btn btn-primary" type="submit">Calculate</button>
+    </EditForm>
+    <hr>
+</div>
+
+@if (_overtimePay != null)
+{
+    <div class="alert alert-info mt-3">
+        <strong>Total Salary Pay:</strong> @FormatCurrency(_totalSalary)<br>
+        <strong>Total Overtime Pay:</strong> @FormatCurrency(_overtimePay)
+    </div>
+}
+
+@code {
+    [SupplyParameterFromForm] private SalaryData? DataModel { get; set; }
+
+    private double? _totalSalary;
+    private double? _overtimePay;
+
+    protected override void OnInitialized() => DataModel ??= new SalaryData();
+
+    private void CalculateSalary()
+    {
+        var dailySalary = DataModel?.Salary / 30;
+        var hourlyWage = dailySalary / 8;
+
+        if (DataModel?.ExtraHours <= 3)
+        {
+            _overtimePay = hourlyWage * 2 * DataModel?.ExtraHours;
+        }
+        else
+        {
+            _overtimePay = hourlyWage * 3 * DataModel?.ExtraHours;
+        }
+
+        _totalSalary = DataModel?.Salary + _overtimePay;
+    }
+
+    private class SalaryData
+    {
+        [Required]
+        [Range(1, double.MaxValue, ErrorMessage = "Please enter a valid salary.")]
+        public double Salary { get; set; }
+
+        [Required]
+        [Range(1, double.MaxValue, ErrorMessage = "Please enter a valid number of extra hours.")]
+        public double ExtraHours { get; set; }
+    }
+
+    private static string FormatCurrency(double? value)
+    {
+        var cultureInfo = new System.Globalization.CultureInfo("es-MX");
+        return value?.ToString("C", cultureInfo) ?? string.Empty;
+    }
+
+}
