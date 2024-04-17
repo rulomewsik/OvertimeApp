@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("OvertimeApp")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+fe2fceed16685130126ae4f705d57d2a0966136a")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+a2f7bdb32cd60b87e062f09084f1ced52ffc97b5")]
 [assembly: System.Reflection.AssemblyProductAttribute("OvertimeApp")]
 [assembly: System.Reflection.AssemblyTitleAttribute("OvertimeApp")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
